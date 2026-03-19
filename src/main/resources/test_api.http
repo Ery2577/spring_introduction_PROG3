@@ -1,8 +1,6 @@
 ### GET /welcome
 GET http://localhost:8080/welcome?name=Heriniaina
 
-###
-
 ### POST /student
 POST http://localhost:8080/student
 Content-Type: application/json
@@ -15,3 +13,7 @@ Content-Type: application/json
     "Age": 20
   }
 ]
+
+### GET /Student
+GET http://localhost:8080/student
+Accept: text/plain
