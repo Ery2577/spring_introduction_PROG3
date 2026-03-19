@@ -1,4 +1,4 @@
-package com.TD.spring_introduction;
+package com.TD.spring_introduction.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
