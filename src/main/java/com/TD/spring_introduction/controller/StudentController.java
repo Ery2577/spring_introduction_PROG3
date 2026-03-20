@@ -14,24 +14,53 @@ public class StudentController {
 
     private static List<Student> studentsMemory = new ArrayList<>();
 
-    @PostMapping("/student")
-    public List<Student> addStudent(@RequestBody List<Student> newStudents) {
-        studentsMemory.addAll(newStudents);
-        return studentsMemory;
+    @PostMapping("/students")
+    public ResponseEntity<List<Student>> addStudents(@RequestBody List<Student> newStudents) {
+        try {
+            studentsMemory.addAll(newStudents);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(studentsMemory);
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
     }
 
-    @GetMapping("/student")
-    public ResponseEntity<?> getStudentsNames(@RequestHeader(value = "Accept", defaultValue = "text/plain") String acceptHeader){
-        if ("text/plain".equalsIgnoreCase(acceptHeader)){
-            String names = studentsMemory
-                    .stream()
-                    .map(Student::getName)
-                    .collect(Collectors.joining(", "));
-            return ResponseEntity.ok(names);
-        } else {
+    @GetMapping("/students")
+    public ResponseEntity<?> getStudents(
+            @RequestHeader(value = "Accept", required = false) String acceptHeader) {
+
+        try {
+            if (acceptHeader == null || acceptHeader.isBlank()) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("The head 'Accept' is obligatory");
+            }
+
+            if (acceptHeader.contains("text/plain")) {
+                String names = studentsMemory.stream()
+                        .map(Student::getName)
+                        .collect(Collectors.joining(", "));
+                return ResponseEntity.ok(names);
+            }
+
+            else if (acceptHeader.contains("application/json")) {
+                return ResponseEntity.ok(studentsMemory);
+            }
+
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_IMPLEMENTED)
+                        .body("Format not supported");
+            }
+
+        } catch (Exception e) {
             return ResponseEntity
-                    .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Format not supported");
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
         }
     }
 }

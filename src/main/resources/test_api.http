@@ -17,3 +17,18 @@ Content-Type: application/json
 ### GET /Student
 GET http://localhost:8080/student
 Accept: text/plain
+
+### 4. Récupérer les noms en TEXTE (GET - Code 200)
+GET http://localhost:8080/students
+Accept: text/plain
+
+### 5. Récupérer les objets en JSON (GET - Code 200)
+GET http://localhost:8080/students
+Accept: application/json
+
+### 6. Test Header absent (GET - Code 400)
+GET http://localhost:8080/students
+
+### 7. Test Format non supporté (GET - Code 501)
+GET http://localhost:8080/students
+Accept: application/xml
